@@ -3,6 +3,54 @@ hiera_explain Omnibus project
 This project creates full-stack platform-specific packages for
 `hiera_explain`!
 
+Why?
+------------
+
+[hiera_explain](https://github.com/binford2k/hiera_explain) is an awesome tool. However, as a gem, it can overwrite the binary path for hiera, puppet and facter. Definetly something you want to avoid on your production infrastructure!
+
+The various gems it needs also require newer versions of Ruby, which might not be avaliable on older systems (CentOS 6 is still on 1.8.7 Ruby)
+
+So instead, this repo allows the creation of specific omnibus packages, and installs the hiera configuration under `/opt/hiera_explain`, allowing one to determine issues with your hiera config without having to worry about conflicting with your existing Puppet install:
+
+```
+[root@hiera-explain-centos-6]# /opt/hiera_explain/bin/hiera_explain
+Backend data directories:
+  * yaml: /etc/puppetlabs/code/environments/production/hieradata
+
+Expanded hierarchy:
+  * common
+
+File lookup order:
+  [ ] /etc/puppetlabs/code/environments/production/hieradata/common.yaml
+
+Priority lookup results:
+
+Array lookup results:
+
+Hash lookup results:
+```
+
+Packages are avaliable from the [release page](https://github.com/petems/omnibus-hiera_explain/releases).
+
+Pre-Requite Steps
+------------
+
+#### CentOS 6
+```
+yum install epel* -y;
+yum install yajl-devel make gcc yajl-devel https://github.com/feedforce/ruby-rpm/releases/download/2.3.1/ruby-2.3.1-1.el6.x86_64.rpm gcc gcc-c++ gecode-devel gecode-devel  gecode-devel autoconf tree git prepeation preparation patch fakeroot rpmbuild rpm-build patch fakeroot rpm-build -y;
+yum install http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.rpm -y;
+yum install -y git;
+git config --global user.email "you@example.com"
+git config --global user.name "Your Name";
+gem install bundler;
+git clone https://github.com/petems/omnibus-hiera_explain /opt/omnibus-hiera_explain;
+cd /opt/omnibus-hiera_explain;
+bundle install --binstubs;
+bin/omnibus build hiera_explain;
+```
+
+
 Installation
 ------------
 You must have a sane Ruby 1.9+ environment with Bundler installed. Ensure all
