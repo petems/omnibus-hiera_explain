@@ -1,0 +1,9 @@
+#!/bin/bash
+#
+# Perform necessary omnibus-hiera_explain removal steps
+# after package is uninstalled.
+#
+
+echo "omnibus-hiera_explain has been uninstalled!"
+
+exit 0
